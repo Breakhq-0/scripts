@@ -1,0 +1,37 @@
+
+local Player                           =      game:GetService('Players').LocalPlayer
+local UIS                                =      game:GetService('UserInputService')
+
+
+local Character                     =     script.Parent
+
+local Mouse                          =    Player:GetMouse()
+
+local KeyBind                       =    Enum.KeyCode.LeftControl
+
+
+function ClickTP()
+	local PositionToTeleportTo = Mouse.Hit.Position
+	
+	local distance = (Character.HumanoidRootPart.Position - PositionToTeleportTo).Magnitude
+	if distance > 200 then
+		return
+	end
+	Character.HumanoidRootPart.CFrame = CFrame.new(PositionToTeleportTo + Vector3.new(0, 5, 0))
+end
+
+
+function OnInputBegin(Input, GameProcessed)
+	if GameProcessed then return end
+	if Input.KeyCode == KeyBind then
+		ClickTP()
+	end
+end
+
+
+
+function Start()
+	UIS.InputBegan:Connect(OnInputBegin)
+end
+
+Start()
