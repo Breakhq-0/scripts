@@ -30,8 +30,5 @@ end
 
 
 
-function Start()
-	UIS.InputBegan:Connect(OnInputBegin)
-end
 
-Start()
+UIS.InputBegan:Connect(OnInputBegin)
