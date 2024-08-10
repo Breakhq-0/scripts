@@ -29,6 +29,4 @@ function OnInputBegin(Input, GameProcessed)
 end
 
 
-
-
 UIS.InputBegan:Connect(OnInputBegin)
