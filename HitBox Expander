@@ -1,0 +1,62 @@
+local Players = game:GetService('Players')
+local UserInputService = game:GetService('UserInputService')
+local RunService = game:GetService('RunService')
+local LocalPlayer = Players.LocalPlayer
+
+
+
+local KeyBind = Enum.KeyCode.G
+local ExpandSize = Vector3.new(6,8,6)
+local Enabled = false
+
+function ExpandHitBox(rootpart :BasePart)
+	rootpart.Size = ExpandSize
+	rootpart.Transparency = .5
+	rootpart.CanCollide  = false
+end
+
+
+function ResetHitBox(rootpart :BasePart)
+	rootpart.Size = Vector3.new(2,2,1)
+	rootpart.Transparency = 1
+end
+
+
+
+
+
+UserInputService.InputBegan:Connect(function(Input, Processed)
+	if Input.KeyCode == KeyBind and not Processed then
+		Enabled = not Enabled
+		game.StarterGui:SetCore("SendNotification",{
+			Title     =  "Hbe", 
+			Text     =   "Status: "..tostring(Enabled),
+			Duration = 0.5,
+		})
+	end
+end)
+
+
+RunService.RenderStepped:Connect(function()
+	if Enabled then
+		for _, player in pairs(Players:GetChildren())do
+			if player~= LocalPlayer then
+				local chars = player.Character
+				local rootparts = chars.HumanoidRootPart
+				ExpandHitBox(rootparts)
+			end
+		end
+	elseif not Enabled then
+		for _, player in pairs(Players:GetChildren())do
+			if player ~= LocalPlayer then
+				local chars = player.Character
+				local rootparts = chars.HumanoidRootPart
+				ResetHitBox(rootparts)
+			end
+		end
+	end
+end)
+
+
+
+
