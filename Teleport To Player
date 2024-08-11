@@ -1,0 +1,98 @@
+local Players = game:GetService('Players')
+local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local ScreenGui = Instance.new("ScreenGui")
+local Holder = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+
+
+local target = nil
+local character = Players.LocalPlayer.Character
+local rootpart = character:WaitForChild('HumanoidRootPart')
+
+local dragToggle = nil
+local dragSpeed = 0.1
+local dragStart = nil
+local startPos = nil
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+Holder.Name = "Holder"
+Holder.Parent = ScreenGui
+Holder.AnchorPoint = Vector2.new(0, 0.5)
+Holder.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Holder.BorderSizePixel = 0
+Holder.Position = UDim2.new(0, 10, 0.5, 0)
+Holder.Size = UDim2.new(0, 200, 0, 100)
+
+
+TextBox.Parent = Holder
+TextBox.AnchorPoint = Vector2.new(0.5, 0)
+TextBox.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.5, 0, 0, 20)
+TextBox.Size = UDim2.new(1, -25, 0, 35)
+TextBox.Font = Enum.Font.SourceSansBold
+TextBox.Text = "Player name"
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextScaled = true
+TextBox.TextSize = 14.000
+TextBox.TextWrapped = true
+
+TextButton.Parent = Holder
+TextButton.AnchorPoint = Vector2.new(0.5, 1)
+TextButton.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.5, 0, 1, -10)
+TextButton.Size = UDim2.new(1, -35, 0, 20)
+TextButton.Font = Enum.Font.SourceSansBold
+TextButton.Text = "GOTO"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+TextButton.MouseButton1Click:Connect(function()
+	local player = TextBox.Text
+	
+	for i, v in pairs(Players:GetChildren()) do
+		if  string.upper(v.DisplayName):find(string.upper(player)) then 
+			target = v
+			rootpart.CFrame = target.Character.HumanoidRootPart.CFrame
+			target = nil
+		end
+	end
+end)
+
+
+
+
+local function updateInput(input)
+	local delta = input.Position - dragStart
+	local position = UDim2.new(startPos.X.Scale,startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	TweenService:Create(Holder, TweenInfo.new(dragSpeed), {Position = position}):Play()
+end
+
+Holder.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+		dragToggle = true
+		dragStart = input.Position
+		startPos = Holder.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragToggle = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if dragToggle then
+			updateInput(input)
+		end
+	end
+end)
