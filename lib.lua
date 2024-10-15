@@ -1081,11 +1081,11 @@ function Library:CreateWindow(Properties)
             
             for Index = 1, NumberOfArguments do
                 if not Arguments[Index] then
-                   -- Missing = Missing .. tostring(Command.Arguments[Index])
+                   Missing = Missing .. tostring(Command.Arguments[Index])
                 end
             end
 
-            --Utility:Log('Error', 'Missing Arguments: ' .. Missing .. ' | Command: ' .. First)
+            Utility:Log('Error', 'Missing Arguments: ' .. Missing .. ' | Command: ' .. First)
 
             if not HoverDebounce then
                 if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
@@ -1149,7 +1149,7 @@ function Library:CreateWindow(Properties)
                 end
             end
         else
-          --  task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
+           task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
 
             if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
                 CommandInput.Text = ''
