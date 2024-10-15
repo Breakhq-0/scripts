@@ -1257,6 +1257,7 @@ function Library:CreateWindow(Properties)
     end)
 
     -- // Command Entered
+    pcall(function()
     CommandInput.FocusLost:Connect(function()
         if not HoverDebounce then
             task.spawn(function()
@@ -1325,7 +1326,7 @@ function Library:CreateWindow(Properties)
             end
         end
     end)
-
+end)
     -- // Tool Tips
     function CreateToolTip(Text, Clone, Enabled)
         local ToolTip = Container.ToolTip
