@@ -1257,8 +1257,9 @@ function Library:CreateWindow(Properties)
     end)
 
     -- // Command Entered
-    pcall(function()
+    
     CommandInput.FocusLost:Connect(function()
+        pcall(function()
         if not HoverDebounce then
             task.spawn(function()
                 HoverDebounce = true
