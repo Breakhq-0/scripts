@@ -1149,7 +1149,7 @@ function Library:CreateWindow(Properties)
                 end
             end
         else
-            task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
+          --  task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
 
             if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
                 CommandInput.Text = ''
