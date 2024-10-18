@@ -1081,7 +1081,7 @@ function Library:CreateWindow(Properties)
             
             for Index = 1, NumberOfArguments do
                 if not Arguments[Index] then
-                   Missing = Missing .. tostring(Command.Arguments[Index])
+                    Missing = Missing .. tostring(Command.Arguments[Index])
                 end
             end
 
@@ -1149,7 +1149,7 @@ function Library:CreateWindow(Properties)
                 end
             end
         else
-           task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
+            task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
 
             if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
                 CommandInput.Text = ''
@@ -1257,9 +1257,7 @@ function Library:CreateWindow(Properties)
     end)
 
     -- // Command Entered
-    
     CommandInput.FocusLost:Connect(function()
-        pcall(function()
         if not HoverDebounce then
             task.spawn(function()
                 HoverDebounce = true
@@ -1270,10 +1268,8 @@ function Library:CreateWindow(Properties)
             if not IsInCommandsHolder and not Dragging then
                 if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
                     task.spawn(function()
-                        pcall(function()
                         Execute(CommandInput.Text)
                         CommandInput.Text = ''
-                        end)
                     end)
 
                     if string.find(Position, 'bottom') then
@@ -1329,7 +1325,7 @@ function Library:CreateWindow(Properties)
             end
         end
     end)
-end)
+
     -- // Tool Tips
     function CreateToolTip(Text, Clone, Enabled)
         local ToolTip = Container.ToolTip
