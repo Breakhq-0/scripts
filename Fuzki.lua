@@ -17,7 +17,7 @@ function FuzkiLib:Create(name, gameName)
     local elements = Instance.new("Frame")
     local elementsCorner = Instance.new("UICorner")
     local elementFolder = Instance.new("Folder")
-
+    FuzkiLib.MainLib = MainLib
     Fuzki.Name = "name"
     Fuzki.Parent = game.CoreGui
     Fuzki.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
