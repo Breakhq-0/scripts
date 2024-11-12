@@ -3,7 +3,7 @@ local NotificationLibrary = {}
 local AbyssGUI = Instance.new("ScreenGui"); AbyssGUI.Name = "Abyss"; AbyssGUI.Parent = game.CoreGui; AbyssGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 function NotificationLibrary:Notify(TitleText, Desc, Delay)
-    local Notification = Instance.new("Frame")
+	local Notification = Instance.new("Frame")
 	local Line = Instance.new("Frame")
 	local Warning = Instance.new("ImageLabel")
 	local UICorner = Instance.new("UICorner")
@@ -15,9 +15,10 @@ function NotificationLibrary:Notify(TitleText, Desc, Delay)
 	Notification.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	Notification.BackgroundTransparency = 0.400
 	Notification.BorderSizePixel = 0
-	Notification.Position = UDim2.new(1, 5, 0, 75)
+	Notification.Position = UDim2.new(1, 5, 1, -5)
 	Notification.Size = UDim2.new(0, 450, 0, 60)
-
+	Notification.AnchorPoint = Vector2.new(0, 1)
+	
 	Line.Name = "Line"
 	Line.Parent = Notification
 	Line.BackgroundColor3 = Color3.fromRGB(241, 196, 15)
@@ -60,13 +61,13 @@ function NotificationLibrary:Notify(TitleText, Desc, Delay)
 	Description.TextSize = 12.000
 	Description.TextStrokeTransparency = 0.500
 	Description.TextXAlignment = Enum.TextXAlignment.Left
-	    Notification:TweenPosition(UDim2.new(1, -400, 0, 75), "Out", "Sine", 0.35)
-	    wait(0.35)
-	    Line:TweenSize(UDim2.new(0, 450, 0, 4), "Out", "Linear", Delay)
-	    wait(Delay)
-	    Notification:TweenPosition(UDim2.new(1, 5, 0, 75), "Out", "Sine", 0.35)
-	    wait(0.35)
-	    Notification:Destroy()
+	Notification:TweenPosition(UDim2.new(1, -400, 0, 75), "Out", "Sine", 0.35)
+	wait(0.35)
+	Line:TweenSize(UDim2.new(0, 450, 0, 4), "Out", "Linear", Delay)
+	wait(Delay)
+	Notification:TweenPosition(UDim2.new(1, 5, 0, 75), "Out", "Sine", 0.35)
+	wait(0.35)
+	Notification:Destroy()
 end
 
 return NotificationLibrary
