@@ -1,70 +1,147 @@
--- Script by IceMinister#9889
-local LibraryName = "Notification Library" -- yes
-local NotificationLibrary = {}
-local TweenService = game:GetService("TweenService")
-local CoreGui = cloneref(game:GetService("CoreGui")) --plr.PlayerGui
-local library
-local templateFolder
-local canvas
-function NotificationLibrary:Load()
-	library = game:GetObjects("rbxassetid://15133757123")[1]
-	templateFolder = library.Templates
-	canvas = library.list
-	library.Name = LibraryName
-	library.Parent = CoreGui
+local notification = {}
+
+local plrgui = game.Players.LocalPlayer:FindFirstChild("PlayerGui")
+if not plrgui then
+	warn("PlayerGui not found.")
+	return notification
 end
-function NotificationLibrary:SendNotification(Mode, Text, Duration)
-	local libaryCore = CoreGui:FindFirstChild(LibraryName)
-	if not CoreGui:FindFirstChild(LibraryName) then
-		NotificationLibrary:Load()
-	else
-		library = libaryCore
-		templateFolder = library.Templates
-		canvas = library.list
-	end
-	if templateFolder:FindFirstChild(Mode) then
-		task.spawn(function()
-			local success, err = pcall(function()
-				local Notification = templateFolder:WaitForChild(Mode):Clone()
-				local filler = Notification.Filler
-				local bar = Notification.bar
-				Notification.Header.Text = Text
 
-				Notification.Visible = true
-				Notification.Parent = canvas
+-- Check if the Notification GUI already exists
+local exists = plrgui:FindFirstChild("Notification")
+if exists then
+	print("Notification GUI already exists.")
+	return notification
+end
 
-				Notification.Size = UDim2.new(0, 0,0.087, 0)
-				Notification.AnchorPoint = Vector2.new(0, 1)
-				Notification.Position =UDim2.new(0,0,1,0)
-				filler.Size = UDim2.new(1, 0,1, 0)
+-- Rest of your script remains the same
+local tween = game:GetService("TweenService")
 
-				local T1 = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-				local T2 = TweenInfo.new(Duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-				local T3 = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local warnicon = "rbxassetid://7249251729"
+local errorsign = "rbxassetid://187736963"
+local notifysign = "rbxassetid://11707615313"
 
-				TweenService:Create(Notification, T1, {Size = UDim2.new(1, 0,0.087, 0)}):Play()
-				task.wait(0.2)
-				TweenService:Create(filler, T3, {Size = UDim2.new(0.011, 0,1, 0)}):Play()
+local Instances = {
+	Notification = Instance.new("ScreenGui"),
+	Main_Holder = Instance.new("Frame"),
+	UICorner = Instance.new("UICorner"),
+	notification_text = Instance.new("TextLabel"),
+	UIPadding = Instance.new("UIPadding"),
+	icon = Instance.new("ImageLabel"),
+	UICorner_2 = Instance.new("UICorner"),
+}
 
-				TweenService:Create(bar, T2, {Size = UDim2.new(1, 0,0.05, 0)}):Play()
+Instances.Notification.Name = "Notification"
+Instances.Notification.Parent = game.Players.LocalPlayer.PlayerGui
 
-				task.wait(Duration)
+Instances.Main_Holder.Name = "Main_Holder"
+Instances.Main_Holder.Size = UDim2.new(0, 311, 0, 40)
+Instances.Main_Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Instances.Main_Holder.Position = UDim2.new(1.00999999, 0, 0.889999986, 0)
+Instances.Main_Holder.BorderSizePixel = 0
+Instances.Main_Holder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Instances.Main_Holder.Parent = Instances.Notification
 
-				TweenService:Create(filler, T1, {Size = UDim2.new(1, 0,1, 0)}):Play()
-				task.wait(0.25)
-				TweenService:Create(Notification, T3, {Size = UDim2.new(0, 0,0.087, 0)}):Play()
-				task.wait(0.25)
-				Notification:Destroy()
-			end)
-			if not success then
-				warn("There was an error while trying to create an notification!")
-				warn(err)
-			end
+Instances.UICorner.Name = "UICorner"
+Instances.UICorner.CornerRadius = UDim.new(0, 4)
+Instances.UICorner.Parent = Instances.Main_Holder
+
+Instances.notification_text.Name = "notification_text"
+Instances.notification_text.Size = UDim2.new(0, 311, 0, 40)
+Instances.notification_text.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Instances.notification_text.BackgroundTransparency = 1
+Instances.notification_text.BorderSizePixel = 0
+Instances.notification_text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Instances.notification_text.TextDirection = Enum.TextDirection.LeftToRight
+Instances.notification_text.TextColor3 = Color3.fromRGB(209, 134, 91)
+Instances.notification_text.Text = "Placeholder"
+Instances.notification_text.TextXAlignment = Enum.TextXAlignment.Left
+Instances.notification_text.TextWrapped = true
+Instances.notification_text.TextSize = 18
+Instances.notification_text.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+Instances.notification_text.Parent = Instances.Main_Holder
+
+Instances.UIPadding.Name = "UIPadding"
+Instances.UIPadding.PaddingBottom = UDim.new(0, 2)
+Instances.UIPadding.PaddingLeft = UDim.new(0, 45)
+Instances.UIPadding.Parent = Instances.notification_text
+
+Instances.icon.Name = "icon"
+Instances.icon.Size = UDim2.new(0, 29, 0, 31)
+Instances.icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Instances.icon.BackgroundTransparency = 1
+Instances.icon.Position = UDim2.new(0.0192926042, 0, 0.100000001, 0)
+Instances.icon.BorderSizePixel = 0
+Instances.icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Instances.icon.ScaleType = Enum.ScaleType.Fit
+Instances.icon.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+Instances.icon.Parent = Instances.Main_Holder
+
+Instances.UICorner_2.Name = "UICorner"
+Instances.UICorner_2.CornerRadius = UDim.new(0, 4)
+Instances.UICorner_2.Parent = Instances.icon
+
+local playing = false
+
+function notification.notify(text, duration)
+	if text and duration and not playing then
+		playing = true
+		local tweening = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(0.745, 0, 0.89, 0) })
+		local tweenoff = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(1.01, 0, 0.89, 0) })
+		Instances.notification_text.Text = text
+		Instances.icon.Image = notifysign
+		tweening:Play()
+		tweening.Completed:Connect(function()
+			wait(duration)
+			tweenoff:Play()
 		end)
+		playing = false
 	else
-		warn("Invalid theme applyed")
+		warn("Text or duration not provided, or in cooldown.")
 	end
 end
 
+function notification.error(text, duration)
+	if text and duration and not playing then
+		playing = true
+		local tweening = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(0.745, 0, 0.89, 0) })
+		local tweenoff = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(1.01, 0, 0.89, 0) })
+		Instances.notification_text.TextColor3 = Color3.fromRGB(160, 25, 75)
+		Instances.notification_text.Text = text
+		Instances.icon.Image = errorsign
+		tweening:Play()
+		tweening.Completed:Connect(function()
+			wait(duration)
+			tweenoff:Play()
+		end)
+		tweenoff.Completed:Connect(function()
+			Instances.notification_text.TextColor3 = Color3.fromRGB(205, 135, 90)
+		end)
+		playing = false
+	else
+		warn("Text or duration not provided, or in cooldown.")
+	end
+end
 
-return NotificationLibrary
+function notification.warn(text, duration)
+	if text and duration and not playing then
+		playing = true
+		local tweening = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(0.745, 0, 0.89, 0) })
+		local tweenoff = tween:Create(Instances.Main_Holder, TweenInfo.new(1), { Position = UDim2.new(1.01, 0, 0.89, 0) })
+		Instances.notification_text.TextColor3 = Color3.fromRGB(190, 160, 90)
+		Instances.notification_text.Text = text
+		Instances.icon.Image = warnicon
+		tweening:Play()
+		tweening.Completed:Connect(function()
+			wait(duration)
+			tweenoff:Play()
+		end)
+		tweenoff.Completed:Connect(function()
+			Instances.notification_text.TextColor3 = Color3.fromRGB(205, 135, 90)
+		end)
+		playing = false
+	else
+		warn("Text or duration not provided, or in cooldown.")
+	end
+end
+
+return notification
